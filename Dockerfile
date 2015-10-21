@@ -6,19 +6,24 @@ ENV BAMBOO_AGENT_HOME /usr/sbin/bamboo-agent-home
 ENV BAMBOO_AGENT_INSTALL /opt/atlassian/bambooagent
 ENV BAMBOO_VERSION 5.9.7
 ENV BAMBOO_AGENT_JAR atlassian-bamboo-agent-installer-$BAMBOO_VERSION.jar
-ENV DOWNLOAD_URL http://$BAMBOO_SERVER:8085/agentServer/agentInstaller/$BAMBOO_AGENT_JAR
 
+# Copy the scripts
+ADD ./download.sh /tmp/download.sh
+ADD ./install.sh /tmp/install.sh
 
 # Install Atlassian Bamboo Agent and helper tools and setup initial home
 # directory structure.
 RUN set -x \
+    && chmod -R 700            /tmp/download.sh \
+    && chown -R daemon:daemon  /tmp/download.sh \
+    && chmod -R 700            /tmp/install.sh \
+    && chown -R daemon:daemon  /tmp/install.sh \
     && mkdir -p                "${BAMBOO_AGENT_HOME}" \
     && chmod -R 700            "${BAMBOO_AGENT_HOME}" \
     && chown -R daemon:daemon  "${BAMBOO_AGENT_HOME}" \
     && mkdir -p                "${BAMBOO_AGENT_INSTALL}" \
     && chmod -R 700            "${BAMBOO_AGENT_INSTALL}" \
-    && chown -R daemon:daemon  "${BAMBOO_AGENT_INSTALL}" \
-    && curl -SL $DOWNLOAD_URL -o $BAMBOO_AGENT_INSTALL/$BAMBOO_AGENT_JAR
+    && chown -R daemon:daemon  "${BAMBOO_AGENT_INSTALL}"
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
@@ -37,5 +42,5 @@ VOLUME ["/var/atlassian/bambooagent"]
 # Set the default working directory as the installation directory.
 WORKDIR ${BAMBOO_AGENT_HOME}
 
-# Run Atlassian JIRA as a foreground process by default.
-#CMD "java -jar $BAMBOO_AGENT_INSTALL/$BAMBOO_AGENT_JAR http://$BAMBOO_SERVER:8085/bamboo/agentServer/" "-fg"
+# Run agent as a foreground process by default.
+CMD ["/tmp/install.sh", "-fg"]
