@@ -6,18 +6,16 @@ ENV BAMBOO_AGENT_HOME /usr/sbin/bamboo-agent-home
 ENV BAMBOO_AGENT_INSTALL /opt/atlassian/bambooagent
 ENV BAMBOO_VERSION 5.9.7
 ENV BAMBOO_AGENT_JAR atlassian-bamboo-agent-installer-$BAMBOO_VERSION.jar
+ENV BAMBOO_AGENT $BAMBOO_AGENT_HOME/bin/bamboo-agent.sh
 
 # Copy the scripts
-ADD ./download.sh /tmp/download.sh
-ADD ./install.sh /tmp/install.sh
+ADD ./run.sh /tmp/run.sh
 
 # Install Atlassian Bamboo Agent and helper tools and setup initial home
 # directory structure.
 RUN set -x \
-    && chmod -R 700            /tmp/download.sh \
-    && chown -R daemon:daemon  /tmp/download.sh \
-    && chmod -R 700            /tmp/install.sh \
-    && chown -R daemon:daemon  /tmp/install.sh \
+    && chmod -R 700            /tmp/run.sh \
+    && chown -R daemon:daemon  /tmp/run.sh \
     && mkdir -p                "${BAMBOO_AGENT_HOME}" \
     && chmod -R 700            "${BAMBOO_AGENT_HOME}" \
     && chown -R daemon:daemon  "${BAMBOO_AGENT_HOME}" \
@@ -43,4 +41,4 @@ VOLUME ["/var/atlassian/bambooagent"]
 WORKDIR ${BAMBOO_AGENT_HOME}
 
 # Run agent as a foreground process by default.
-CMD ["/tmp/download.sh && /tmp/install.sh", "-fg"]
+CMD ["/tmp/run.sh", "-fg"]
