@@ -22,8 +22,11 @@ BAMBOO_AGENT=$BAMBOO_AGENT_HOME/bin/bamboo-agent.sh
 if [ ! -f $BAMBOO_AGENT ]; then
   # Run the agent installer
   echo "-> Running Bamboo Installer ..."
-  java -jar $BAMBOO_AGENT_INSTALL/$BAMBOO_AGENT_JAR http://$BAMBOO_SERVER:8085/bamboo/agentServer/
+  java -jar $BAMBOO_AGENT_INSTALL/$BAMBOO_AGENT_JAR http://$BAMBOO_SERVER:8085/agentServer/
 fi
 
+# Fix permissions
+chown -R daemon:daemon $BAMBOO_AGENT
+
 # Run the Bamboo agent
-$BAMBOO_AGENT console
+# $BAMBOO_AGENT console

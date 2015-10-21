@@ -9,7 +9,8 @@ ENV BAMBOO_AGENT_JAR atlassian-bamboo-agent-installer-$BAMBOO_VERSION.jar
 ENV BAMBOO_AGENT $BAMBOO_AGENT_HOME/bin/bamboo-agent.sh
 
 # Copy the scripts
-ADD ./run.sh /tmp/run.sh
+COPY ./run.sh /tmp/run.sh
+COPY ./bamboo-capabilities.properties $BAMBOO_AGENT_HOME/bin/bamboo-capabilities.properties
 
 # Install Atlassian Bamboo Agent and helper tools and setup initial home
 # directory structure.
@@ -21,7 +22,9 @@ RUN set -x \
     && chown -R daemon:daemon  "${BAMBOO_AGENT_HOME}" \
     && mkdir -p                "${BAMBOO_AGENT_INSTALL}" \
     && chmod -R 700            "${BAMBOO_AGENT_INSTALL}" \
-    && chown -R daemon:daemon  "${BAMBOO_AGENT_INSTALL}"
+    && chown -R daemon:daemon  "${BAMBOO_AGENT_INSTALL}" \
+    && chmod -R 700            "${BAMBOO_AGENT_HOME}/bin/bamboo-capabilities.properties" \
+    && chown -R daemon:daemon  "${BAMBOO_AGENT_HOME}/bin/bamboo-capabilities.properties"
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
