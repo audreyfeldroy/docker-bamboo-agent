@@ -43,4 +43,4 @@ VOLUME ["/var/atlassian/bambooagent"]
 WORKDIR ${BAMBOO_AGENT_HOME}
 
 # Run agent as a foreground process by default.
-CMD ["/tmp/install.sh", "-fg"]
+CMD ["/tmp/download.sh && /tmp/install.sh", "-fg"]
