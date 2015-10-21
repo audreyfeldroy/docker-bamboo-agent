@@ -1,12 +1,15 @@
 # docker-bamboo-agent
 
+## Quickstart
+
 To run:
 
     docker run -e BAMBOO_SERVER=123.45.67.89 -t bamboo-agent
 
+## Setting this up locally in order to contribute
+
 To build:
 
-    docker build -e BAMBOO_SERVER=123.45.67.89 -t bamboo-agent .
-
-This doesn't actually work because you can't create env vars at build time:
-http://stackoverflow.com/questions/27711304/create-dynamic-environment-variables-at-build-time-in-docker
+    git clone https://github.com/audreyr/docker-bamboo-agent.git
+    cd docker-bamboo-agent
+    docker build -t bamboo-agent .
