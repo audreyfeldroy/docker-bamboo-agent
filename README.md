@@ -1,5 +1,7 @@
 # docker-bamboo-agent
 
+[![Pulls on Docker Hub](https://img.shields.io/docker/pulls/aroygreenfeld/bamboo-agent.svg)]
+
 ## Quickstart
 
 To run:
